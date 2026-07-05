@@ -6,9 +6,6 @@ import re
 import json
 import os
 from dotenv import load_dotenv
-import uuid
-import urllib.parse
-from aiohttp import web
 import aiohttp
 import asyncio
 
@@ -38,7 +35,6 @@ class SecurityClient(discord.Client):
         print("Synced commands globally.")
         
         # Start API
-        self.loop.create_task(start_web_server())
 
     async def on_ready(self):
         print(f"Logged in as {self.user} (ID: {self.user.id})")
@@ -81,127 +77,6 @@ class SecurityClient(discord.Client):
 
 client = SecurityClient(intents=intents)
 
-# ---- DASHBOARD API ----
-sessions = {} # token -> user dict
-
-async def handle_options(request):
-    return web.Response(headers={"Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "GET, POST, OPTIONS", "Access-Control-Allow-Headers": "*"})
-
-def cors_response(data, status=200):
-    return web.json_response(data, status=status, headers={"Access-Control-Allow-Origin": "*"})
-
-async def api_login(request):
-    client_id = os.getenv("DISCORD_CLIENT_ID")
-    redirect_uri = urllib.parse.quote("http://localhost:5173/auth/callback")
-    url = f"https://discord.com/api/oauth2/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code&scope=identify%20guilds"
-    return cors_response({"url": url})
-
-async def api_callback(request):
-    data = await request.json()
-    code = data.get("code")
-    client_id = os.getenv("DISCORD_CLIENT_ID")
-    client_secret = os.getenv("DISCORD_CLIENT_SECRET")
-    redirect_uri = "http://localhost:5173/auth/callback"
-
-    if client_id == "YOUR_CLIENT_ID_HERE" or client_secret == "YOUR_CLIENT_SECRET_HERE" or not client_id:
-         # Development fallback if user hasn't set env vars yet
-         token = str(uuid.uuid4())
-         sessions[token] = {"id": "123", "username": "Admin", "access_token": "dummy"}
-         return cors_response({"token": token, "user": sessions[token]})
-
-    async with aiohttp.ClientSession() as session:
-        resp = await session.post("https://discord.com/api/oauth2/token", data={
-            "client_id": client_id,
-            "client_secret": client_secret,
-            "grant_type": "authorization_code",
-            "code": code,
-            "redirect_uri": redirect_uri
-        })
-        token_data = await resp.json()
-        if "access_token" not in token_data:
-            return cors_response({"error": "Failed to authenticate"}, status=400)
-            
-        access_token = token_data["access_token"]
-        
-        user_resp = await session.get("https://discord.com/api/users/@me", headers={"Authorization": f"Bearer {access_token}"})
-        user_data = await user_resp.json()
-        
-        token = str(uuid.uuid4())
-        sessions[token] = {"id": user_data["id"], "username": user_data["username"], "access_token": access_token}
-        
-        return cors_response({"token": token, "user": sessions[token]})
-
-async def api_guilds(request):
-    token = request.headers.get("Authorization")
-    if token not in sessions: return cors_response({"error": "Unauthorized"}, status=401)
-    
-    session_data = sessions[token]
-    
-    # Dummy data fallback
-    if session_data["access_token"] == "dummy":
-        guilds = []
-        for g in client.guilds:
-            guilds.append({"id": str(g.id), "name": g.name, "icon": getattr(g.icon, 'url', None), "is_admin": True})
-        return cors_response({"guilds": guilds})
-
-    async with aiohttp.ClientSession() as http_session:
-        guilds_resp = await http_session.get("https://discord.com/api/users/@me/guilds", headers={"Authorization": f"Bearer {session_data['access_token']}"})
-        user_guilds = await guilds_resp.json()
-        
-        valid_guilds = []
-        bot_guild_ids = [str(g.id) for g in client.guilds]
-        for g in user_guilds:
-            if (int(g.get("permissions", 0)) & 0x8) == 0x8 and str(g["id"]) in bot_guild_ids:
-                valid_guilds.append({
-                    "id": g["id"],
-                    "name": g["name"],
-                    "icon": f"https://cdn.discordapp.com/icons/{g['id']}/{g['icon']}.png" if g.get("icon") else None,
-                    "is_admin": True
-                })
-                
-        return cors_response({"guilds": valid_guilds})
-
-async def api_get_settings(request):
-    guild_id = request.match_info.get("id")
-    token = request.headers.get("Authorization")
-    if token not in sessions: return cors_response({"error": "Unauthorized"}, status=401)
-    
-    config = get_guild_config(guild_id)
-    return cors_response({"config": config})
-
-async def api_save_settings(request):
-    guild_id = request.match_info.get("id")
-    token = request.headers.get("Authorization")
-    if token not in sessions: return cors_response({"error": "Unauthorized"}, status=401)
-    
-    data = await request.json()
-    config_cache[guild_id] = data
-    save_config(config_cache)
-    return cors_response({"status": "success"})
-
-async def start_web_server():
-    app = web.Application()
-    app.add_routes([
-        web.get('/api/auth/login', api_login),
-        web.post('/api/auth/callback', api_callback),
-        web.get('/api/user/guilds', api_guilds),
-        web.get('/api/guilds/{id}/settings', api_get_settings),
-        web.post('/api/guilds/{id}/settings', api_save_settings),
-        
-        web.options('/api/auth/login', handle_options),
-        web.options('/api/auth/callback', handle_options),
-        web.options('/api/user/guilds', handle_options),
-        web.options('/api/guilds/{id}/settings', handle_options)
-    ])
-    
-    runner = web.AppRunner(app)
-    await runner.setup()
-    site = web.TCPSite(runner, '0.0.0.0', 5000)
-    await site.start()
-    print("Dashboard API running on http://0.0.0.0:5000")
-# -----------------------------
-
-# --- Trackers ---
 action_trackers = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
 spam_tracker = defaultdict(lambda: defaultdict(list))
 security_history = [] # Stores last 20 events: {"time": timestamp, "event": str, "user": str}

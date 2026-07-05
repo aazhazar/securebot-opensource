@@ -7,7 +7,6 @@ An advanced Discord security and anti-nuke bot equipped with features like mass 
 - **Anti-Nuke Protection:** Prevent mass bans, mass kicks, mass channel deletions, and role deletions.
 - **Server Security:** Anti-bot, anti-webhook creation, and strict permission monitoring.
 - **Automod & Anti-Spam:** Block bad words, invitiation links, and spamming automatically.
-- **Dashboard API:** Integrated `aiohttp` web server for a web dashboard.
 
 ## Getting Started
 
@@ -42,11 +41,9 @@ The bot uses a `.env` file to securely store its configuration. To add your toke
 2. It should look like this:
    ```env
    TOKEN="YOUR_TOKEN_ID_HERE"
-   DISCORD_CLIENT_ID="YOUR_CLIENT_ID_HERE"
-   DISCORD_CLIENT_SECRET="YOUR_CLIENT_SECRET_HERE"
    ```
 3. Replace `YOUR_TOKEN_ID_HERE` with your actual Discord Bot Token. You can find this on the [Discord Developer Portal](https://discord.com/developers/applications) under the **Bot** tab.
-4. Replace the Client ID and Client Secret if you plan to use the Dashboard API.
+
 5. Save the `.env` file. **Never share this token with anyone!**
 
 ---
@@ -70,4 +67,12 @@ You can host this bot 24/7 for free using [Orihost](https://orihost.com/). Here 
 
 ### Important Note on Intents
 To ensure the bot works perfectly, go to the Discord Developer Portal, select your application, click on the **Bot** tab, and toggle **ON** all Privileged Gateway Intents (Presence Intent, Server Members Intent, and Message Content Intent).
-#
+
+---
+
+## Author & Support
+
+- **Developed by:** [aazdev.xyz](https://aazdev.xyz/)
+- **Support me:** If you like this project and want to support me, consider buying a membership at [aazgroup.co/memberships](https://aazgroup.co/memberships)!
+
+#   s e c u r e b o t - o p e n s o u r c e  
