@@ -55,6 +55,8 @@ The bot uses a `.env` file to securely store its configuration. To add your toke
 
 You can host this bot 24/7 for free using [Orihost](https://orihost.com/). Here is a step-by-step guide:
 
+[![Orihost Hosting Tutorial](https://img.youtube.com/vi/m6bY9PMYaHg/0.jpg)](https://www.youtube.com/watch?v=m6bY9PMYaHg)
+
 1. **Create an Account:** Go to [orihost.com](https://orihost.com/) and register for a free account.
 2. **Create a Server:** Once logged into the dashboard/panel, click on **Create Server** (or similar).
 3. **Select Environment:** Choose the free tier and select **Python** as your server type/egg.
