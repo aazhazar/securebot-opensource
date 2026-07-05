@@ -1,0 +1,186 @@
+{
+    "1506705288739160206": {
+        "modules": {
+            "mass_ban": {
+                "enabled": true,
+                "punishment": "ban",
+                "limits": {
+                    "60": 5,
+                    "3600": 10
+                }
+            },
+            "mass_kick": {
+                "enabled": true,
+                "punishment": "ban",
+                "limits": {
+                    "60": 5,
+                    "3600": 10
+                }
+            },
+            "mass_channel_delete": {
+                "enabled": true,
+                "punishment": "ban",
+                "limits": {
+                    "60": 3
+                }
+            },
+            "mass_role_delete": {
+                "enabled": true,
+                "punishment": "ban",
+                "limits": {
+                    "60": 3
+                }
+            },
+            "anti_bot": {
+                "enabled": true,
+                "punishment": "ban"
+            },
+            "anti_webhook": {
+                "enabled": true,
+                "punishment": "ban"
+            },
+            "anti_guild_update": {
+                "enabled": true,
+                "punishment": "ban"
+            },
+            "anti_vanity_change": {
+                "enabled": true,
+                "punishment": "ban"
+            },
+            "anti_integration": {
+                "enabled": true,
+                "punishment": "ban"
+            },
+            "anti_emoji_delete": {
+                "enabled": true,
+                "punishment": "ban",
+                "limits": {
+                    "60": 5
+                }
+            },
+            "anti_sticker_delete": {
+                "enabled": true,
+                "punishment": "ban",
+                "limits": {
+                    "60": 5
+                }
+            },
+            "anti_dangerous_permissions": {
+                "enabled": true,
+                "punishment": "ban"
+            },
+            "automod": {
+                "enabled": true
+            },
+            "anti_spam": {
+                "enabled": true,
+                "limit": 5,
+                "interval": 5
+            },
+            "age_gate": {
+                "enabled": true,
+                "min_days": 7
+            },
+            "scam_detection": {
+                "enabled": true,
+                "channel_id": 1521836679416123402
+            }
+        },
+        "logs": {
+            "mod": 1521836683568349245,
+            "security": 1521836683568349245
+        }
+    },
+    "1328776091560706140": {
+        "modules": {
+            "mass_ban": {
+                "enabled": true,
+                "punishment": "ban",
+                "limits": {
+                    "60": 5,
+                    "3600": 10
+                }
+            },
+            "mass_kick": {
+                "enabled": true,
+                "punishment": "ban",
+                "limits": {
+                    "60": 5,
+                    "3600": 10
+                }
+            },
+            "mass_channel_delete": {
+                "enabled": true,
+                "punishment": "ban",
+                "limits": {
+                    "60": 3
+                }
+            },
+            "mass_role_delete": {
+                "enabled": true,
+                "punishment": "ban",
+                "limits": {
+                    "60": 3
+                }
+            },
+            "anti_bot": {
+                "enabled": true,
+                "punishment": "ban"
+            },
+            "anti_webhook": {
+                "enabled": true,
+                "punishment": "ban"
+            },
+            "anti_guild_update": {
+                "enabled": true,
+                "punishment": "ban"
+            },
+            "anti_vanity_change": {
+                "enabled": true,
+                "punishment": "ban"
+            },
+            "anti_integration": {
+                "enabled": true,
+                "punishment": "ban"
+            },
+            "anti_emoji_delete": {
+                "enabled": true,
+                "punishment": "ban",
+                "limits": {
+                    "60": 5
+                }
+            },
+            "anti_sticker_delete": {
+                "enabled": true,
+                "punishment": "ban",
+                "limits": {
+                    "60": 5
+                }
+            },
+            "anti_dangerous_permissions": {
+                "enabled": true,
+                "punishment": "ban"
+            },
+            "automod": {
+                "enabled": true
+            },
+            "anti_spam": {
+                "enabled": true,
+                "limit": 5,
+                "interval": 5
+            },
+            "age_gate": {
+                "enabled": false,
+                "min_days": 7
+            },
+            "scam_detection": {
+                "enabled": false,
+                "channel_id": null
+            }
+        },
+        "logs": {
+            "mod": null,
+            "security": null
+        }
+    }
+}
